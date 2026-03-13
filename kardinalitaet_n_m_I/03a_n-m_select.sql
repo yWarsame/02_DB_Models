@@ -1,9 +1,28 @@
--- 03. SELECTS / Servants, Products, Purchases
+\! cls
+# SELECTS
 
--- Einzeltabellen
+# Einzeltabellen
+-- SELECT * FROM design.cats;
+-- SELECT * FROM design.servants;
 
+# Kreuzprodukt (Kartesisches Produkt)
+-- SELECT * FROM design.cats JOIN design.servants
+-- ORDER BY design.cats.id ASC
+-- ;
 
--- Inner Join 1 / Kombi (servants / products / purchases)
+-- Inner Join 1 / Gesamte Tabelle
+SELECT
+    *
+FROM design.cats INNER JOIN design.servants
+ON design.cats.id = design.servants.cats_id
+;
+
+-- Inner Join 2 / (Wer dient wem?)
+-- Wer dient Grizabella?
+-- Wem dient X?
+
+-- Inner Join 2a / (Wer dient wem?)
+-- "X ist der Diener von Y" / Dienstverhältnis
 
 
 
