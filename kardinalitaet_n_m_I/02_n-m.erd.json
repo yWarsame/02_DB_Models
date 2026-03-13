@@ -10,7 +10,7 @@
     "show": 511,
     "database": 4,
     "databaseName": "",
-    "canvasType": "@dineug/erd-editor/builtin-schema-sql",
+    "canvasType": "ERD",
     "language": 1,
     "tableNameCase": 4,
     "columnNameCase": 2,
@@ -119,7 +119,7 @@
           "TlzDF9i0hvnut3aPziew_"
         ],
         "ui": {
-          "x": 384,
+          "x": 353,
           "y": 413,
           "zIndex": 87,
           "widthName": 93,
@@ -127,7 +127,7 @@
           "color": ""
         },
         "meta": {
-          "updateAt": 1773394606860,
+          "updateAt": 1773396053156,
           "createAt": 1773392948918
         }
       }
@@ -434,7 +434,7 @@
           "columnIds": [
             "8cCXNW62V57vuY8WXFgId"
           ],
-          "x": 506.25,
+          "x": 475.25,
           "y": 413,
           "direction": 4
         },
@@ -462,7 +462,7 @@
           "columnIds": [
             "pCKjYKpD6sOb7IWrINt9E"
           ],
-          "x": 750.75,
+          "x": 719.75,
           "y": 413,
           "direction": 4
         },
