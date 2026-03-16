@@ -1,140 +1,121 @@
--- \! cls
+\! cls
 
--- -- Vorbereitung
--- SET NAMES utf8mb4;
+-- Vorbereitung
+USE design;
+DROP TABLE IF EXISTS purchases;
+DROP TABLE IF EXISTS products;
+DROP TABLE IF EXISTS servants;
+DROP TABLE IF EXISTS cats;
 
--- DROP TABLE IF EXISTS design.purchases;
--- DROP TABLE IF EXISTS design.servants;
--- DROP TABLE IF EXISTS design.products;
--- DROP TABLE IF EXISTS design.cats;
+/* Cats */
 
--- /* Cats */
--- -- Mastertabelle: unverändert
--- CREATE TABLE IF NOT EXISTS design.cats
--- (
---   id INT NOT NULL AUTO_INCREMENT,
---   cat_name VARCHAR(45) NOT NULL,
---   fur_color VARCHAR(45) NOT NULL,
---   PRIMARY KEY (id)
--- );
+-- Mastertabelle: unverändert
+CREATE TABLE IF NOT EXISTS cats
+(
+  id INT NOT NULL AUTO_INCREMENT,
+  cat_name  VARCHAR(45) NOT NULL,
+  fur_color VARCHAR(45) NOT NULL,
+  PRIMARY KEY (id)
+);
 
--- -- Struktur: MT
--- DESCRIBE design.cats;
+-- Struktur: MT
+DESCRIBE design.cats;
 
--- -- Inserts: MT (Mastertable)
--- INSERT INTO design.cats (id, cat_name, fur_color) VALUES 
--- (DEFAULT, "Whiskers", "brown"),
--- (DEFAULT, "Mittens", "black"),
--- (DEFAULT, "Simba", "orange");
+-- Inserts: MT (Mastertable)
+INSERT INTO cats (id, cat_name,fur_color) VALUES (DEFAULT, "Grizabella", "white");
+INSERT INTO cats (id, cat_name,fur_color) VALUES (DEFAULT, "Alonzo", "grey");
+INSERT INTO cats (id, cat_name,fur_color) VALUES (DEFAULT, "Mausi", "striped");
 
--- -- Inhalte: MT
--- SELECT * FROM design.cats;
+-- Cats: Inhalte 
+SELECT * FROM design.cats;
 
--- /* SERVANTS */
--- -- Detailtabelle: Verbindung zur MT über Fremdschlüssel
--- CREATE TABLE IF NOT EXISTS design.servants
--- (
---   id INT NOT NULL AUTO_INCREMENT,
---   servant_name VARCHAR(45) NOT NULL,
---   yrs_served INT NOT NULL,
---   cats_id INT NOT NULL,
---   PRIMARY KEY (id)
--- );
 
--- -- Fremdschlüssel: DT
--- ALTER TABLE design.servants
---   ADD CONSTRAINT FK_cats_TO_servants
---     FOREIGN KEY (cats_id)
---     REFERENCES cats (id);
+/* SERVANTS */
 
--- -- wichtig bei 1:1 UNIQUE im fk
--- ALTER TABLE design.servants
---   ADD CONSTRAINT unique_cat_per_servant UNIQUE (cats_id);
+-- Detailtabelle: Verbindung zur MT über Fremdschlüssel
+CREATE TABLE IF NOT EXISTS servants
+(
+  id INT NOT NULL AUTO_INCREMENT,
+  servant_name VARCHAR(45) NOT NULL,
+  yrs_served   TINYINT NOT NULL,
+  cats_id      INT     NOT NULL,
+  PRIMARY KEY (id)
+);
 
--- -- Struktur: DT
--- DESCRIBE design.servants;
+-- Fremdschlüssel: DT
+ALTER TABLE servants
+  ADD CONSTRAINT FK_cats_TO_servants
+    FOREIGN KEY (cats_id)
+    REFERENCES cats (id);
 
--- -- Inserts: DT
--- INSERT INTO design.servants (id, servant_name, yrs_served, cats_id) VALUES 
--- (DEFAULT, "John", 3, 1),
--- (DEFAULT, "Mary", 5, 2),
--- (DEFAULT, "Peter", 2, 3);
+-- wichtig bei 1:1  UNIQUE im fk
+ALTER TABLE servants
+  ADD CONSTRAINT UQ_cats_id UNIQUE (cats_id);
 
--- -- Servants: Struktur
--- SELECT * FROM design.servants;
+-- Struktur: DT
+DESCRIBE design.servants;
 
--- /* PRODUCTS */
--- -- Products: ohne Fremdschlüssel
--- CREATE TABLE IF NOT EXISTS design.products
--- (
---   id INT NOT NULL AUTO_INCREMENT,
---   product_name VARCHAR(45) NOT NULL,
---   product_price DECIMAL(10,2) NOT NULL,
---   PRIMARY KEY (id)
--- );
+-- Inserts: DT
+INSERT INTO servants (id, servant_name, yrs_served, cats_id) VALUES (DEFAULT, "Yasin", 5, 1);
+INSERT INTO servants (id, servant_name, yrs_served, cats_id) VALUES (DEFAULT, "Thiemo", 2, 2);
+INSERT INTO servants (id, servant_name, yrs_served, cats_id) VALUES (DEFAULT, "Tarik", 4, 3);
 
--- -- Products: Struktur
--- DESCRIBE design.products;
+-- Sevants: Inhalte 
+SELECT * FROM design.servants;
 
--- -- Products: Inserts
--- INSERT INTO design.products (id, product_name, product_price) VALUES 
--- (DEFAULT, "Cat Food", 25.99),
--- (DEFAULT, "Cat Toy", 12.50),
--- (DEFAULT, "Cat Bed", 45.00),
--- (DEFAULT, "Litter Box", 30.00);
+/*  PRODUCTS */
 
--- -- Products: Inhalte 
--- SELECT * FROM design.products;
+-- Products: ohne Fremdschlüssel
+CREATE TABLE IF NOT EXISTS products
+(
+  id            INT          NOT NULL AUTO_INCREMENT,
+  product_name  VARCHAR(45)  NOT NULL,
+  product_price DECIMAL(4,2) NOT NULL,
+  PRIMARY KEY (id)
+);
 
--- /* PURCHASES (Kaufprozesse) */
--- -- ServantsProducts (purchases)
--- CREATE TABLE IF NOT EXISTS design.purchases
--- (
---   id INT NOT NULL AUTO_INCREMENT,
---   servants_id INT NOT NULL,
---   products_id INT NOT NULL,
---   n INT NOT NULL,
---   m INT NOT NULL,
---   PRIMARY KEY (id)
--- );
+-- Products: Struktur
+DESCRIBE design.products;
 
--- -- Fremdschlüssel: purchases
--- ALTER TABLE design.purchases
---   ADD CONSTRAINT FK_servants_TO_purchases
---     FOREIGN KEY (servants_id)
---     REFERENCES servants (id);
-    
--- ALTER TABLE design.purchases
---   ADD CONSTRAINT FK_products_TO_purchases
---     FOREIGN KEY (products_id)
---     REFERENCES products (id);
+-- Products: Inserts
+INSERT INTO products (id, product_name, product_price) VALUES (DEFAULT, "Whiskas|Lachs", 2.75);
+INSERT INTO products (id, product_name, product_price) VALUES (DEFAULT, "Whiskas|Huhn", 2.80);
+INSERT INTO products (id, product_name, product_price) VALUES (DEFAULT, "Felix|Jelly", 3.75);
+INSERT INTO products (id, product_name, product_price) VALUES (DEFAULT, "Felix|Sauce", 3.80);
 
--- -- Purchases: Struktur
--- DESCRIBE design.purchases;
+-- Products: Inhalte 
+SELECT * FROM design.products;
 
--- -- Purchases: Inserts (Kaufprozesse : Käufer - Produkt)
--- INSERT INTO design.purchases (id, servants_id, products_id, n, m) VALUES 
--- (DEFAULT, 1, 1, 2, 1),
--- (DEFAULT, 1, 2, 1, 3),
--- (DEFAULT, 2, 3, 1, 1),
--- (DEFAULT, 3, 1, 3, 2),
--- (DEFAULT, 3, 4, 1, 1);
+/*  PURCHASES (Kaufprozesse)*/
+
+-- ServantsProducts (purchases)
+CREATE TABLE IF NOT EXISTS purchases
+(
+  servants_id INT NOT NULL,
+  products_id INT NOT NULL
+);
+
+ALTER TABLE purchases
+  ADD CONSTRAINT FK_servants_TO_purchases
+    FOREIGN KEY (servants_id)
+    REFERENCES servants (id);
+
+ALTER TABLE purchases
+  ADD CONSTRAINT FK_products_TO_purchases
+    FOREIGN KEY (products_id)
+    REFERENCES products (id);
+
+-- Purchases: Struktur
+DESCRIBE design.purchases;
+
+-- Purchases: Inserts (Kaufprozesse : Käufer - Produkt)
+INSERT INTO purchases (servants_id, products_id) VALUES (1, 1);
+INSERT INTO purchases (servants_id, products_id) VALUES (1, 3);
+INSERT INTO purchases (servants_id, products_id) VALUES (2, 2);
+INSERT INTO purchases (servants_id, products_id) VALUES (2, 3);
+INSERT INTO purchases (servants_id, products_id) VALUES (2, 4);
+INSERT INTO purchases (servants_id, products_id) VALUES (3, 4);
+
 
 -- Purchases: Inhalte
 SELECT * FROM design.purchases;
-
--- Übersicht: Alle Daten mit Beziehungen
-SELECT 
-    s.servant_name AS Diener,
-    s.yrs_served AS Jahre_im_Dienst,
-    c.cat_name AS Katze,
-    c.fur_color AS Fellfarbe,
-    p.product_name AS Produkt,
-    p.product_price AS Preis,
-    pu.n AS Menge_N,
-    pu.m AS Menge_M
-FROM design.purchases pu
-JOIN design.servants s ON pu.servants_id = s.id
-JOIN design.cats c ON s.cats_id = c.id
-JOIN design.products p ON pu.products_id = p.id
-ORDER BY s.servant_name, p.product_name;

@@ -1,6 +1,6 @@
-\! cls
 
-# Vorbereitung
+\! cls
+-- Vorbereitung
 
 SET NAMES utf8mb4;
 
@@ -22,18 +22,14 @@ CREATE TABLE design.servants
 DESCRIBE design.servants;
 
 -- Servants: Inserts
-# Servants: Inserts
 INSERT INTO design.servants (id, servant_name, yrs_served) VALUES (DEFAULT, "Max", 5);
 INSERT INTO design.servants (id, servant_name, yrs_served) VALUES (DEFAULT, "Maxine", 3);
 
 -- Servants: Inhalte 
 SELECT * FROM design.servants;
 
--- Time delay for demonstration purposes
-DO SLEEP(1);
 
 /*  PRODUCTS */
-
 -- Products: ohne Fremdschlüssel
 CREATE TABLE design.products
 (
@@ -55,9 +51,6 @@ INSERT INTO design.products (id, product_name, product_price) VALUES
 
 -- Products: Inhalte 
 SELECT * FROM design.products;
-
--- Time delay for demonstration purposes
-DO SLEEP(1);
 
 /*  PURCHASES (Kaufprozesse)*/
 -- ServantsProducts (purchases)
@@ -85,13 +78,36 @@ ALTER TABLE design.purchases
 DESCRIBE design.purchases;
 
 -- Purchases: Inserts (Kaufprozesse : Käufer - Produkt)
--- TimeStampAdd() für zeitliche Abfolge der Kaufprozesse
+-- INSERT INTO design.purchases (id, servants_id, products_id, p_time) VALUES 
+-- (DEFAULT, 1, 2, DEFAULT),
+-- (DEFAULT, 1, 3, DEFAULT), 
+-- (DEFAULT, 2, 1, DEFAULT),
+-- (DEFAULT, 2, 2, DEFAULT),
+-- (DEFAULT, 2, 3, DEFAULT),
+-- (DEFAULT, 2, 4, DEFAULT);
+
+-- Purchases: Inserts / Variante SLEEP() Danke, YASIN!
+-- INSERT INTO design.purchases (id, servants_id, products_id, p_time) VALUES (DEFAULT, 1 , 2, DEFAULT);
+-- DO SLEEP(1);
+-- INSERT INTO design.purchases (id, servants_id, products_id, p_time) VALUES (DEFAULT, 1, 3, DEFAULT);
+-- DO SLEEP(1);
+-- INSERT INTO design.purchases (id, servants_id, products_id, p_time) VALUES (DEFAULT, 2, 1, DEFAULT);
+-- DO SLEEP(1);
+-- INSERT INTO design.purchases (id, servants_id, products_id, p_time) VALUES (DEFAULT, 2, 2, DEFAULT);
+-- DO SLEEP(1);
+-- INSERT INTO design.purchases (id, servants_id, products_id, p_time) VALUES (DEFAULT, 2, 3, DEFAULT);
+-- DO SLEEP(1);
+-- INSERT INTO design.purchases (id, servants_id, products_id, p_time) VALUES (DEFAULT, 2, 4, DEFAULT);
+
+-- Purchases: Inserts / TIMESTAMPADD /  Danke, Jennifer!
 INSERT INTO design.purchases (id, servants_id, products_id, p_time) VALUES
 (DEFAULT, 1, 2, CURRENT_TIMESTAMP),
-(DEFAULT, 1, 3, TIMESTAMPADD(MINUTE, 1, CURRENT_TIMESTAMP)),
-(DEFAULT, 2, 1, TIMESTAMPADD(MINUTE, 2, CURRENT_TIMESTAMP)),
-(DEFAULT, 2, 2, TIMESTAMPADD(MINUTE, 3, CURRENT_TIMESTAMP)),
-(DEFAULT, 2, 3, TIMESTAMPADD(MINUTE, 4, CURRENT_TIMESTAMP)),
-(DEFAULT, 2, 4, TIMESTAMPADD(MINUTE, 5, CURRENT_TIMESTAMP));
+(DEFAULT, 1, 3, TIMESTAMPADD(MINUTE, 12, CURRENT_TIMESTAMP)),
+(DEFAULT, 2, 1, TIMESTAMPADD(MINUTE, 24, CURRENT_TIMESTAMP)),
+(DEFAULT, 2, 2, TIMESTAMPADD(MINUTE, 36, CURRENT_TIMESTAMP)),
+(DEFAULT, 2, 3, TIMESTAMPADD(MINUTE, 48, CURRENT_TIMESTAMP)),
+(DEFAULT, 2, 4, TIMESTAMPADD(MINUTE, 60, CURRENT_TIMESTAMP));
+
+
 -- Purchases: Inhalte 
 SELECT * FROM design.purchases;
